@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 
 /// Helper class to save the PDF document on Android, iOS, Windows, and macOS.
@@ -12,5 +13,8 @@ class SaveHelper {
       await file.delete();
     }
     await file.writeAsBytes(bytes);
+    
+    ///Open the PDF document
+    OpenFile.open(file.path);
   }
 }

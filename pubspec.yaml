@@ -12,6 +12,7 @@ dependencies:
   path_provider:
   syncfusion_flutter_pdfviewer:
   web:
+  open_file:
 
 dev_dependencies:
   flutter_test:
