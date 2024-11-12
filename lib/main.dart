@@ -22,8 +22,8 @@ class PdfViewerPage extends StatefulWidget {
 
 class _PdfViewerPageState extends State<PdfViewerPage> {
   PdfViewerController _pdfViewerController = PdfViewerController();
-  final UndoHistoryController _undoController = UndoHistoryController();
-  late List<int> formDataBytes;
+  final UndoHistoryController _undoRedoController = UndoHistoryController();
+  late List<int> exportFormBytes;
   @override
   void initState() {
     _pdfViewerController = PdfViewerController();
@@ -41,11 +41,11 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
             child: Row(
               children: <Widget>[
                 ValueListenableBuilder(
-                    valueListenable: _undoController,
+                    valueListenable: _undoRedoController,
                     builder: (context, value, child) {
                       return IconButton(
-                        onPressed: _undoController.value.canUndo
-                            ? _undoController.undo
+                        onPressed: _undoRedoController.value.canUndo
+                            ? _undoRedoController.undo
                             : null,
                         icon: const Icon(Icons.undo),
                         tooltip: 'Undo', // Add tooltip here
@@ -53,11 +53,11 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
                     }),
                 const SizedBox(width: 10), // Add space between buttons
                 ValueListenableBuilder(
-                    valueListenable: _undoController,
+                    valueListenable: _undoRedoController,
                     builder: (context, value, child) {
                       return IconButton(
-                        onPressed: _undoController.value.canRedo
-                            ? _undoController.redo
+                        onPressed: _undoRedoController.value.canRedo
+                            ? _undoRedoController.redo
                             : null,
                         icon: const Icon(Icons.redo),
                         tooltip: 'Redo', // Add tooltip here
@@ -70,7 +70,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
                   ),
                   tooltip: 'Export Form Data',
                   onPressed: () async {
-                    formDataBytes = _pdfViewerController.exportFormData(
+                    exportFormBytes = _pdfViewerController.exportFormData(
                         dataFormat: DataFormat.xfdf);
                   },
                 ),
@@ -82,7 +82,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
                   tooltip: 'Import Form Data',
                   onPressed: () async {
                     _pdfViewerController.importFormData(
-                        formDataBytes, DataFormat.xfdf);
+                        exportFormBytes, DataFormat.xfdf);
                   },
                 ),
                 const SizedBox(width: 10), // Add space between buttons
@@ -106,7 +106,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       body: SfPdfViewer.asset(
         'assets/form_document.pdf',
         controller: _pdfViewerController,
-        undoController: _undoController,
+        undoController: _undoRedoController,
       ),
     );
   }

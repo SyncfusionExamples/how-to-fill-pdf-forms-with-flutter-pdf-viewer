@@ -13,7 +13,7 @@ class SaveHelper {
       await file.delete();
     }
     await file.writeAsBytes(bytes);
-    
+
     ///Open the PDF document
     OpenFile.open(file.path);
   }
